@@ -54,6 +54,9 @@ class Player(object):
         self.number = self.player_count
         self.name = name
 
+    def __str__(self):
+        return "Player: %s" % self.name
+
     def get_name(self):
         """ Returns player name. """
         return self.name
@@ -74,15 +77,16 @@ class HumanPlayer(Player):
 
     def get_human_name(self):
         """ Asks human players to specify their name. """
-        raw_input("Please input your name: ")
+        return raw_input("Please input your name: ")
 
     def get_next_move(self):
         """ Gets next move from a human player. """
-        input("Please input your next move (0 to 5): ")
+        return input("Please input your next move (0 to 5): ")
 
 
 
 class AIPlayer(Player):
+    """ Base class for an AI Player """
     def __init__(self, ai_profile=None):
         """ Initializes an AI profile. """
         if ai_profile:
@@ -152,13 +156,13 @@ class Board(object):
                 index += 1
             except IndexError:
                 # Proceed to next area
-                current_area = get_next_area(current_area)
+                current_area = self.get_next_area(current_area)
 
                 # Check to ensure opposing store is skipped.
                 if player.number == 1 and current_area == P2_STORE:
-                    current_area = get_next_area(current_area)
+                    current_area = self.get_next_area(current_area)
                 elif player.number == 2 and current_area == P1_STORE:
-                    current_area = get_next_area(current_area)
+                    current_area = self.get_next_area(current_area)
                 else:
                     pass
                 # Reset index and increment stone at current position
@@ -180,53 +184,10 @@ class Board(object):
         else:
             raise InvalidBoardArea
 
+    def get_player1_score(self):
+        """ Returns score for Player 1. """
+        return self.board[1][0]
 
-# Concept inventory
-# TDD!
-# Cyclical board with pits, stones, stores
-# Players who take turns
-# Stone transactions: moving, capturing
-# Free turn
-# Display UI
-# Accept user input for turn.
-
-# Rules
-# if you run into your own store, deposit 1 piece, if opponent's store, skip it.
-# if last stone placed into your store, free turn
-# if last stone places is an empty hole on your side, capture it AND opp stones on other side
-# game ends when all six places on one side are empty
-# player with stones left when finished captures all those stones
-# player with most stores in store at end wins
-
-# Needed functions
-# def move_stones
-# def captures_stones - checks if an option captures stones
-# def capture_stones - handles the transaction
-# def gets_another_turn
-# def finishes_game - checks if an option finishes the game
-# def finish_game - handles transaction of finishing game
-# def game_finished - checks if game is finished
-# def get_score
-# def calculate_second_finisher_score - calculates score of 2nd finisher
-
-# Tests
-# each of above functions
-
-
-
-        
-
-# AI Ideas
-# Check if any moves capture stones
-# Check if any moves get another turn
-# Check if it's possible to get another turn AND capture stones
-# Else: go with moves that line up another turn on next turn
-# Check future state: if taking a certain interaction sets up good next turn
-# Check other player ability to disrupt: if taking interaction allows other player to disrupt
-# Test various probabilities to each selection
-
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+    def get_player2_score(self):
+        """ Returns score for Player 2"""
+        return self.board[3][0]
