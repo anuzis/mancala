@@ -29,9 +29,9 @@ MonteCarlo: searches for best move via Monte Carlo simulation
 
 ### AI Decision Tree Ideas
 Check if any moves capture stones (calculate value Vs free moves)
-Check for sequences to maximize free turns
+Check for sequences to maximize free immediate turns
 Check for sequences that maximize free turns AND capture
-Else: go with moves that line up another turn on next turn
 Check future state: if taking a certain interaction sets up good next turn
 Check other player ability to disrupt: if taking interaction allows other player to disrupt
+Else: evaluate moves that optimize free turn potential
 Test various probabilities to each selection
