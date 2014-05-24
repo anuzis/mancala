@@ -1,4 +1,4 @@
-NOTE: Game is not functional yet. Started developing yesterday, it still have a ways to go.
+NOTE: Game is not functional yet. Started developing yesterday, it still has a ways to go.
 
 First attempt at an object oriented implementation of Mancala, purely for my own learning.
 
