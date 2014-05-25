@@ -2,8 +2,8 @@
 
 import unittest
 
-from ..mancala.board import Board, InvalidBoardArea
-from ..mancala.constants import P1_PITS, P2_PITS, P1_STORE
+from ..mancala.board import Board, InvalidMove
+from ..mancala.constants import P1_PITS, P2_PITS, P1_STORE, P2_STORE
 
 class TestPlayer1Moves(unittest.TestCase):
     """ Tests for Mancala Board functions. """
@@ -53,6 +53,14 @@ class TestPlayer1Moves(unittest.TestCase):
 
         print "test_player1__move_stones() tests pass."
 
+    def test_free_move_earned(self):
+        """ Test that free moves are only earned in one's own store. """
+        assert self.board2._earned_free_move(1, P1_STORE)
+        assert self.board5._earned_free_move(2, P2_STORE)
+        self.assertFalse(self.board2._earned_free_move(1, P1_PITS))
+        self.assertFalse(self.board2._earned_free_move(1, P2_PITS))
+        self.assertFalse(self.board2._earned_free_move(2, P2_PITS))
+
     def test_player1_stone_capture(self):
         """ Test player 1 capturing stones from player 2 """
         assert self.board5._move_stones(1, 1) == \
@@ -74,6 +82,11 @@ class TestPlayer1Moves(unittest.TestCase):
         """ Test that get_scores works. """
         self.board5._move_stones(1, 1)
         self.assertEqual(self.board5.get_scores(), (7, 1))
+
+    def test_invalid_move(self):
+        """ Confirm InvalidMove raised when no stones at given index. """
+        with self.assertRaises(InvalidMove):
+            self.board5._move_stones(1, 5)
 
     def test_reverse_index(self):
         """ Test that _reverse_index works. """
@@ -129,9 +142,9 @@ class TestTextifyBoardFunctions(unittest.TestCase):
         self.board = Board(test_state=[[4, 4, 4, 0, 5, 5], [1], \
                             [5, 4, 4, 4, 4, 4], [0]])
 
-    def test__textify_board(self):
+    def test_textify_board(self):
         """ Test that textify_board correctly renders board.
         Takes a Board instance as input. """
-        assert self.board._textify_board() == \
+        assert self.board.textify_board() == \
                                     "   4  4  4  4  4  5\n 0                    1\n   4  4  4  0  5  5\n"
-        print "_textify_board() tests pass."
+        print "textify_board() tests pass."

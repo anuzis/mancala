@@ -6,6 +6,10 @@ class InvalidBoardArea(Exception):
     """ Exception flagged when moves are attempted on an unknown area. """
     pass
 
+class InvalidMove(Exception):
+    """ Exception flagged when no stones are available at given index. """
+    pass
+
 class Board(object):
     """ A Mancala board with size pockets per player and stones """
 
@@ -15,7 +19,7 @@ class Board(object):
         else:
             self.board = [[stones] * pits, [0], [stones] * pits, [0]]
 
-    def _textify_board(self):
+    def textify_board(self):
         """ Returns the current board as a printable string to show the user.
 
         Note that the order of player 2 pits are displayed in reverse
@@ -31,11 +35,12 @@ class Board(object):
                        self.board[0][0], self.board[0][1], self.board[0][2],
                        self.board[0][3], self.board[0][4], self.board[0][5])
 
-    def _move_stones(self, player_num, start_index):
+    def _move_stones(self, player_num, start_index, check_free_move=False):
         """ Moves stones by the Player associated with player_num,
         starting at the given index.
 
-        Returns finished state of the Board.
+        By default, returns: finished state of Board.board
+        Alt: returns whether a free move is earned (set check_free_move=True)
 
         player_num: integer from Player.number class
         start_index: integer specified by player (must be 0-5)
@@ -44,6 +49,10 @@ class Board(object):
             current_area = P1_PITS
         else:
             current_area = P2_PITS
+
+        # Confirm stones are available at the given index.
+        if not self.board[current_area][start_index]:
+            raise InvalidMove
 
         # Pick up the stones from the right pit.
         stones_grabbed = self.board[current_area][start_index]
@@ -77,7 +86,19 @@ class Board(object):
         if self._earned_capture(player_num, current_area, index):
             self.board = self._process_capture(current_area, index)
 
+        if check_free_move:
+            return self._earned_free_move(player_num, current_area)
+
         return self.board
+
+    def _earned_free_move(self, player_num, last_area):
+        """ Checks whether a free move was earned. """
+        if player_num == 1 and last_area == P1_STORE:
+            return True
+        elif player_num == 2 and last_area == P2_STORE:
+            return True
+        else:
+            return False
 
     def _earned_capture(self, player_num, last_area, last_index):
         """ Checks whether the last move earned a capture.
@@ -136,7 +157,7 @@ class Board(object):
         reverse_index.reverse()
         return reverse_index[index]
 
-    def _get_opposing_area_and_index(self, orig_area, index, as_tuple=False):
+    def _get_opposing_area_and_index(self, orig_area, index):
         """ Returns opposing_area, opposing_index
 
         Optionally returns as tuple for assertion testing.
@@ -155,10 +176,7 @@ class Board(object):
 
         opposing_index = self._reverse_index(index)
 
-        if as_tuple:
-            return (opposing_area, opposing_index)
-        else:
-            return opposing_area, opposing_index
+        return opposing_area, opposing_index
 
 
     def _get_next_area(self, current_area):

@@ -4,7 +4,7 @@ from random import choice
 
 from .constants import DEFAULT_NAME, RANDOM_AI, VECTOR_AI, DEFAULT_AI, \
     P1_PITS, P2_PITS
-from .board import Board
+from .board import Board, InvalidMove
 
 class Match(object):
     """ A match of Mancala has two Players and a Board.
@@ -15,13 +15,42 @@ class Match(object):
 
     def __init__(self):
         """ Initializes a new match. """
-        self.players = [Player(1), Player(2)]
+        self.players = [Player(1), AIPlayer(2)]
         self.player1 = self.players[0]
         self.player2 = self.players[1]
         self.current_turn = self.player1
         self.board = Board()
 
-    def swap_current_turn(self):
+    def handle_next_move(self):
+        """ Shows board and handles next move. """
+        self.board.textify_board()
+
+        next_move = self.current_turn.get_next_move()
+        try:
+            self.board._move_stones(self.current_turn.number, next_move)
+        except InvalidMove:
+            if self.current_turn.__class__ == HumanPlayer:
+                print "Please select a move with stones you can move."
+            self.handle_next_move()
+
+        # Check whether game was won.
+        if self._check_for_winner():
+            import sys
+            sys.exit()
+
+        # Check whether free move was earned
+        if self.board._move_stones(
+            self.current_turn.number,
+            next_move, check_free_move=True
+            ):
+            print "Free move earned!"
+            self.handle_next_move()
+        else:
+            self._swap_current_turn()
+            self.handle_next_move()
+
+
+    def _swap_current_turn(self):
         """ Swaps current turn to the other player. """
         if self.current_turn == self.player1:
             self.current_turn = self.player2

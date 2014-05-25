@@ -18,8 +18,8 @@ class TestMatchFunctions(unittest.TestCase):
     def test_turn_swap(self):
         """ Test that it starts as player1's turn and swaps correctly. """
         assert self.match.current_turn == self.match.player1
-        assert self.match.swap_current_turn() == self.match.player2
-        assert self.match.swap_current_turn() == self.match.player1
+        assert self.match._swap_current_turn() == self.match.player2
+        assert self.match._swap_current_turn() == self.match.player1
 
     def test_player1_win(self):
         """ Test that a won match is detected. """
