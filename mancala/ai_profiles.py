@@ -45,15 +45,19 @@ class AIPlayer(Player):
 
         return elig_free_turns
 
+    def _think(self):
+        """ Slight delay for thinking. """
+        import time
+        print "AI is thinking..."
+        time.sleep(3)
+
 class RandomAI(AIPlayer):
     """ AI Profile that randomly selects from eligible moves. """
 
     def get_next_move(self):
         """ Returns next AI move based on profile. """
 
-        import time
-        print "AI is thinking..."
-        time.sleep(2)
+        self._think()
 
         return choice(self.eligible_moves)
 
@@ -62,6 +66,9 @@ class VectorAI(AIPlayer):
 
     def get_next_move(self):
         """ Use an reverse indices vector to optimize for free turns. """
+
+        self._think()
+
         reverse_indices = range(0, 6)
         reverse_indices.reverse()
 
@@ -69,13 +76,13 @@ class VectorAI(AIPlayer):
         for i in reverse_indices:
             if self.eligible_free_turns[i] == 1:
                 if self.pits[i] == reverse_index(i) + 1:
-                    print "VectorAI, round 1, trying index: " + str(i)
+                    print "VectorAI, mode 1, playing: " + str(i)
                     return i
         # Then clear out inefficient pits.
         for i in reverse_indices:
             if self.pits[i] > reverse_index(i) + 1:
-                print "VectorAI, round 2, trying index: " + str(i)
+                print "VectorAI, mode 2, playing: " + str(i)
                 return i
         # Finally, select a random eligible move.
-        print "VectorAI, round 3, trying an eligible move."
+        print "VectorAI, mode 3, playing an eligible move."
         return choice(self.eligible_moves)
