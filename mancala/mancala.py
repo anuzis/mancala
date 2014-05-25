@@ -2,8 +2,8 @@
 
 from random import choice
 
-from .constants import DEFAULT_NAME, RANDOM_AI, VECTOR_AI, DEFAULT_AI, \
-    P1_PITS, P2_PITS, P1_STORE, P2_STORE
+from .constants import DEFAULT_NAME, AI_NAME, RANDOM_AI, VECTOR_AI, \
+    DEFAULT_AI, P1_PITS, P2_PITS, P1_STORE, P2_STORE
 from .board import Board, InvalidMove
 
 class Player(object):
@@ -59,7 +59,6 @@ class Match(object):
 
         # Check whether free move was earned
         if free_move_earned:
-            print "Free move earned!"
             self.handle_next_move()
         else:
             self._swap_current_turn()
@@ -77,12 +76,13 @@ class Match(object):
 
     def _check_for_winner(self):
         """ Checks for winner. Announces the win."""
-        # TODO(anuzis): when game finishes, add remaining stones in 2nd finisher's pit to their store.
         if set(self.board.board[P1_PITS]) == set([0]):
-            print "Player 1 finished! P1: %d to P2: %d" % (self.board.board[P1_STORE][0], self.board.board[P2_STORE][0])
+            self.board.board = self.board.gather_remaining(self.player2.number)
+            print "Player 1 finished! %s: %d to %s: %d" % (self.player1.name, self.board.board[P1_STORE][0], self.player2.name, self.board.board[P2_STORE][0])
             return True
         elif set(self.board.board[P2_PITS]) == set([0]):
-            print "Player 2 finished! P1: %d to P2: %d" % (self.board.board[P1_STORE][0], self.board.board[P2_STORE][0])
+            self.board.board = self.board.gather_remaining(self.player1.number)
+            print "Player 2 finished! %s: %d to %s: %d" % (self.player1.name, self.board.board[P1_STORE][0], self.player2.name, self.board.board[P2_STORE][0])
             return True
         else:
             return False
@@ -103,13 +103,14 @@ class HumanPlayer(Player):
 
     def get_next_move(self):
         """ Gets next move from a human player. """
-        return input("Please input your next move (0 to 5): ")
+        value = input("Please input your next move (1 to 6): ")
+        return value - 1
 
 class AIPlayer(Player):
     """ Base class for an AI Player """
-    def __init__(self, number, board, ai_profile=None):
+    def __init__(self, number, board, name=AI_NAME, ai_profile=None):
         """ Initializes an AI profile. """
-        super(AIPlayer, self).__init__(number, board)
+        super(AIPlayer, self).__init__(number, board, name)
         if ai_profile:
             self.ai_profile = ai_profile
         else:
@@ -136,7 +137,7 @@ class AIPlayer(Player):
 
         import time
         print "AI is thinking..."
-        #time.sleep(5)
+        time.sleep(2)
 
         eligible_moves = self._get_eligible_moves()
 

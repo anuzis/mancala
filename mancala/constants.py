@@ -8,6 +8,7 @@ P2_STORE = 3
 
 # Player names
 DEFAULT_NAME = 'Player'
+AI_NAME = 'AI'
 
 # Player types
 HUMAN_PLAYER = 0

@@ -87,9 +87,6 @@ class Board(object):
             earned_free_move = False
 
         # If last move earned a capture, process it.
-        print "Checking for capture at area and index %d %d " % (current_area, index)
-        print "Current board position: " + str(self.board)
-        print "Capture result: " + str(self._earned_capture(player_num, current_area, index))
         if self._earned_capture(player_num, current_area, index):
             self.board = self._process_capture(current_area, index)
 
@@ -161,6 +158,31 @@ class Board(object):
         self.board[destination_store][0] += total_gain
 
         return self.board
+
+    def gather_remaining(self, player_num):
+        """ Gathers stones from remaining_area and deposits
+        in the associated player's store. (when game is finished)
+
+        Returns finished Board.board state."""
+        
+        if player_num == 1:
+            remaining_area = P1_PITS
+            destination_store = P1_STORE
+        elif player_num == 2:
+            remaining_area = P2_PITS
+            destination_store = P2_STORE
+        else:
+            raise Exception("Unknown player.")
+
+        remaining_stones = 0
+        for i in range(6):
+            remaining_stones += self.board[remaining_area][i]
+            self.board[remaining_area][i] = 0
+
+        self.board[destination_store][0] += remaining_stones
+
+        return self.board
+
 
     def _reverse_index(self, index):
         """ Returns the mirror index to check opposing stones. """
