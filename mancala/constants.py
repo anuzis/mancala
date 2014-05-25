@@ -18,4 +18,4 @@ DEFAULT_TYPE = HUMAN_PLAYER
 # AI Profiles
 RANDOM_AI = 0 # purely random
 VECTOR_AI = 1 # optimizes for free turns only considering own side
-DEFAULT_AI = 0
+DEFAULT_AI = 1

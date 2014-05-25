@@ -1,9 +1,6 @@
 """ Mancala app. """
 
-from random import choice
-
-from .constants import DEFAULT_NAME, AI_NAME, RANDOM_AI, VECTOR_AI, \
-    DEFAULT_AI, P1_PITS, P2_PITS, P1_STORE, P2_STORE
+from .constants import DEFAULT_NAME, P1_PITS, P2_PITS, P1_STORE, P2_STORE
 from .board import Board, InvalidMove
 
 class Player(object):
@@ -106,44 +103,8 @@ class HumanPlayer(Player):
         value = input("Please input your next move (1 to 6): ")
         return value - 1
 
-class AIPlayer(Player):
-    """ Base class for an AI Player """
-    def __init__(self, number, board, name=AI_NAME, ai_profile=None):
-        """ Initializes an AI profile. """
-        super(AIPlayer, self).__init__(number, board, name)
-        if ai_profile:
-            self.ai_profile = ai_profile
-        else:
-            self.ai_profile = DEFAULT_AI
-
-    def _get_eligible_moves(self):
-        """ Returns a list of integers representing eligible moves. """
-        
-        if self.number == 1:
-            pits = self.board.board[P1_PITS]
-        else:
-            pits = self.board.board[P2_PITS]
-
-        eligible_moves = []
-        for i in range(len(pits)):
-            if not pits[i] == 0:
-                eligible_moves.append(i)
-
-        return eligible_moves
-
-
-    def get_next_move(self):
-        """ Returns next AI move based on profile. """
-
-        import time
-        print "AI is thinking..."
-        time.sleep(2)
-
-        eligible_moves = self._get_eligible_moves()
-
-        if self.ai_profile == RANDOM_AI:
-            return choice(eligible_moves)
-        elif self.ai_profile == VECTOR_AI:
-            pass
-            # TODO(anuzis): use thoughtful way to instantiate classes that
-            # inherit from AI_Profile.
+def reverse_index(index):
+    """ Returns the mirror index to the one given. """
+    rev_index = range(0, 6)
+    rev_index.reverse()
+    return rev_index[index]

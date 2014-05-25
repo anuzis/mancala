@@ -92,12 +92,13 @@ class TestPlayer1Moves(unittest.TestCase):
     def test_reverse_index(self):
         """ Test that _reverse_index works. """
         # Assumes 6 pits.
-        self.assertEqual(self.board5._reverse_index(0), 5)
-        self.assertEqual(self.board5._reverse_index(1), 4)
-        self.assertEqual(self.board5._reverse_index(2), 3)
-        self.assertEqual(self.board5._reverse_index(3), 2)
-        self.assertEqual(self.board5._reverse_index(4), 1)
-        self.assertEqual(self.board5._reverse_index(5), 0)
+        from ..mancala.mancala import reverse_index
+        self.assertEqual(reverse_index(0), 5)
+        self.assertEqual(reverse_index(1), 4)
+        self.assertEqual(reverse_index(2), 3)
+        self.assertEqual(reverse_index(3), 2)
+        self.assertEqual(reverse_index(4), 1)
+        self.assertEqual(reverse_index(5), 0)
 
     def test_get_opposing_area_and_index(self):
         """ Test that _get_opposing_area_and_index works. """

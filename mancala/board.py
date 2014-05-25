@@ -183,18 +183,13 @@ class Board(object):
 
         return self.board
 
-
-    def _reverse_index(self, index):
-        """ Returns the mirror index to check opposing stones. """
-        reverse_index = range(len(self.board[0]))
-        reverse_index.reverse()
-        return reverse_index[index]
-
     def _get_opposing_area_and_index(self, orig_area, index):
         """ Returns opposing_area, opposing_index
 
         Optionally returns as tuple for assertion testing.
          """
+
+        from .mancala import reverse_index
 
         if orig_area == P1_PITS:
             opposing_area = P2_PITS
@@ -207,7 +202,7 @@ class Board(object):
         else:
             raise InvalidBoardArea
 
-        opposing_index = self._reverse_index(index)
+        opposing_index = reverse_index(index)
 
         return opposing_area, opposing_index
 
