@@ -35,12 +35,11 @@ class Board(object):
                        self.board[0][0], self.board[0][1], self.board[0][2],
                        self.board[0][3], self.board[0][4], self.board[0][5])
 
-    def _move_stones(self, player_num, start_index, check_free_move=False):
+    def _move_stones(self, player_num, start_index):
         """ Moves stones by the Player associated with player_num,
         starting at the given index.
 
-        By default, returns: finished state of Board.board
-        Alt: returns whether a free move is earned (set check_free_move=True)
+        Returns: new state of Board.board, earned_free_move (bool)
 
         player_num: integer from Player.number class
         start_index: integer specified by player (must be 0-5)
@@ -82,20 +81,27 @@ class Board(object):
                 index = 0
                 self.board[current_area][index] += 1
 
+        if self._earned_free_move(player_num, current_area):
+            earned_free_move = True
+        else:
+            earned_free_move = False
+
         # If last move earned a capture, process it.
+        print "Checking for capture at area and index %d %d " % (current_area, index)
+        print "Current board position: " + str(self.board)
+        print "Capture result: " + str(self._earned_capture(player_num, current_area, index))
         if self._earned_capture(player_num, current_area, index):
             self.board = self._process_capture(current_area, index)
 
-        if check_free_move:
-            return self._earned_free_move(player_num, current_area)
-
-        return self.board
+        return self.board, earned_free_move
 
     def _earned_free_move(self, player_num, last_area):
         """ Checks whether a free move was earned. """
         if player_num == 1 and last_area == P1_STORE:
+            print "Earned free move!"
             return True
         elif player_num == 2 and last_area == P2_STORE:
+            print "Earned free move!"
             return True
         else:
             return False
@@ -111,14 +117,19 @@ class Board(object):
             last_area, last_index)
 
         # Check whether last move was in Player's own pits.
-        if not (player_num == 1 and last_area == P1_PITS) and \
-        not (player_num == 2 and last_area == P2_PITS):
-            return False
-        
+        if player_num == 1:
+            if not last_area == P1_PITS:
+                return False
+        elif player_num == 2:
+            if not last_area == P2_PITS:
+                return False
+        else:
+            pass
+
         # Check whether last move's pit now has more than 1 stone.
-        elif self.board[last_area][last_index] > 1:
+        if self.board[last_area][last_index] > 1:
             return False
-        
+
         # Check whether opposite pit has capturable stones.
         elif self.board[opposing_area][opposing_index] == 0:
             return False

@@ -34,20 +34,20 @@ class TestPlayer1Moves(unittest.TestCase):
         Takes a Board instance as input. """
 
         # Test from own pits to own pits
-        assert self.board1._move_stones(1, 1) == \
+        assert self.board1._move_stones(1, 1)[0] == \
                             [[4, 0, 5, 5, 5, 5], [0], \
                             [4, 4, 4, 4, 4, 4], [0]]
         # Test from own pits to own store
-        assert self.board2._move_stones(1, 2) == \
+        assert self.board2._move_stones(1, 2)[0] == \
                             [[4, 4, 0, 5, 5, 5], [1], \
                             [4, 4, 4, 4, 4, 4], [0]]
         # Test from own pits to an opposing pit
-        assert self.board3._move_stones(1, 3) == \
+        assert self.board3._move_stones(1, 3)[0] == \
                             [[4, 4, 4, 0, 5, 5], [1], \
                             [5, 4, 4, 4, 4, 4], [0]]
 
         # Test from own pits back through to own pits, skipping opp store
-        assert self.board4._move_stones(1, 4) == \
+        assert self.board4._move_stones(1, 4)[0] == \
                             [[5, 5, 4, 4, 0, 5], [1], \
                             [5, 5, 5, 5, 5, 5], [0]]
 
@@ -63,9 +63,9 @@ class TestPlayer1Moves(unittest.TestCase):
 
     def test_player1_stone_capture(self):
         """ Test player 1 capturing stones from player 2 """
-        assert self.board5._move_stones(1, 1) == \
-                            [[5, 0, 5, 5, 5, 0], [7], \
-                            [0, 5, 0, 5, 5, 5], [1]]
+        self.assertEqual(self.board5._move_stones(1, 1)[0],
+                            [[5, 0, 5, 5, 5, 0], [7],
+                            [0, 5, 0, 5, 5, 5], [1]])
 
         print "test_player1_stone_capture() tests pass."
 
@@ -74,7 +74,8 @@ class TestPlayer1Moves(unittest.TestCase):
         self.board3._move_stones(1, 3)
         self.assertEqual(self.board3.get_score(1), 1)
         self.assertEqual(self.board3.get_score(2), 0)
-        self.board5._move_stones(1, 1)
+        self.board5.board = self.board5._move_stones(1, 1)[0]
+        print "Board 5: " + str(self.board5.board)
         self.assertEqual(self.board5.get_score(1), 7)
         self.assertEqual(self.board5.get_score(2), 1)
 
@@ -123,12 +124,12 @@ class TestPlayer2Moves(unittest.TestCase):
         """ Tests that _move_stones works as expected. """
 
         # Test player 2 movement to opposing pit
-        assert self.board1._move_stones(2, 5) == \
+        assert self.board1._move_stones(2, 5)[0] == \
                             [[5, 5, 5, 4, 4, 4], [0], \
                             [4, 4, 4, 4, 4, 0], [1]]
         # Test player 2 movement through to own pits, skipping opp store,
         # returning through starting pit, and proceeding further
-        assert self.board2._move_stones(2, 2) == \
+        assert self.board2._move_stones(2, 2)[0] == \
                             [[5, 5, 5, 5, 5, 5], [0], \
                             [5, 5, 1, 6, 6, 5], [1]]
 
