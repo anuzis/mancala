@@ -77,6 +77,7 @@ class Match(object):
 
     def _check_for_winner(self):
         """ Checks for winner. Announces the win."""
+        # TODO(anuzis): when game finishes, add remaining stones in 2nd finisher's pit to their store.
         if set(self.board.board[P1_PITS]) == set([0]):
             print "Player 1 finished! P1: %d to P2: %d" % (self.board.board[P1_STORE][0], self.board.board[P2_STORE][0])
             return True
