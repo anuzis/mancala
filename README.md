@@ -6,6 +6,6 @@ Currently supports two basic AI profiles:
 - one vector-based that optimizes for free turns & captures
 - one simple random AI
 
-To run tests:
-python -m unittest discover -s tests -p '*_tests.py'
+To run tests (from inside project directory):
+    `python -m unittest`
 
