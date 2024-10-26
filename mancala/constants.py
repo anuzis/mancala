@@ -5,6 +5,7 @@ P1_PITS = 0
 P1_STORE = 1
 P2_PITS = 2
 P2_STORE = 3
+REVERSE_INDEX = 5 # Functions assuming there are 6 pits indexed 0 to 5
 
 # Player names
 DEFAULT_NAME = 'Player'

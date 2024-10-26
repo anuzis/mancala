@@ -1,7 +1,7 @@
 """ Mancala app. """
 
-from .constants import DEFAULT_NAME, P1_PITS, P2_PITS, P1_STORE, P2_STORE
-from .board import Board, InvalidMove
+from mancala.constants import DEFAULT_NAME, P1_PITS, P2_PITS, P1_STORE, P2_STORE
+from mancala.board import Board, InvalidMove
 
 class Player(object):
     """ A player of Mancala. """
@@ -35,7 +35,7 @@ class Match(object):
 
     def handle_next_move(self):
         """ Shows board and handles next move. """
-        print self.board.textify_board()
+        print(self.board.textify_board())
 
         next_move = self.current_turn.get_next_move()
         try:
@@ -46,7 +46,7 @@ class Match(object):
                 import sys
                 sys.exit()
             if self.current_turn.__class__ == HumanPlayer:
-                print "Please select a move with stones you can move."
+                print("Please select a move with stones you can move.")
             self.handle_next_move()
 
         # Check whether game was won.
@@ -75,11 +75,11 @@ class Match(object):
         """ Checks for winner. Announces the win."""
         if set(self.board.board[P1_PITS]) == set([0]):
             self.board.board = self.board.gather_remaining(self.player2.number)
-            print "Player 1 finished! %s: %d to %s: %d" % (self.player1.name, self.board.board[P1_STORE][0], self.player2.name, self.board.board[P2_STORE][0])
+            print("Player 1 finished! %s: %d to %s: %d" % (self.player1.name, self.board.board[P1_STORE][0], self.player2.name, self.board.board[P2_STORE][0]))
             return True
         elif set(self.board.board[P2_PITS]) == set([0]):
             self.board.board = self.board.gather_remaining(self.player1.number)
-            print "Player 2 finished! %s: %d to %s: %d" % (self.player1.name, self.board.board[P1_STORE][0], self.player2.name, self.board.board[P2_STORE][0])
+            print("Player 2 finished! %s: %d to %s: %d" % (self.player1.name, self.board.board[P1_STORE][0], self.player2.name, self.board.board[P2_STORE][0]))
             return True
         else:
             return False
@@ -96,15 +96,14 @@ class HumanPlayer(Player):
 
     def get_human_name(self):
         """ Asks human players to specify their name. """
-        return raw_input("Please input your name: ")
+        return input("Please input your name: ")
 
     def get_next_move(self):
         """ Gets next move from a human player. """
-        value = input("Please input your next move (1 to 6): ")
+        value = int(input("Please input your next move (1 to 6): "))
         return value - 1
 
 def reverse_index(index):
     """ Returns the mirror index to the one given. """
-    rev_index = range(0, 6)
-    rev_index.reverse()
+    rev_index = range(5,-1,-1)
     return rev_index[index]
