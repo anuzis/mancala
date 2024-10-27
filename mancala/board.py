@@ -1,6 +1,6 @@
 """ Module for Mancala Board class. """
 
-from .constants import P1_PITS, P1_STORE, P2_PITS, P2_STORE
+from mancala.constants import P1_PITS, P1_STORE, P2_PITS, P2_STORE, REVERSE_INDEX
 
 class InvalidBoardArea(Exception):
     """ Exception flagged when moves are attempted on an unknown area. """
@@ -95,10 +95,10 @@ class Board(object):
     def _earned_free_move(self, player_num, last_area):
         """ Checks whether a free move was earned. """
         if player_num == 1 and last_area == P1_STORE:
-            print "Earned free move!"
+            print("Earned free move!")
             return True
         elif player_num == 2 and last_area == P2_STORE:
-            print "Earned free move!"
+            print("Earned free move!")
             return True
         else:
             return False
@@ -147,7 +147,7 @@ class Board(object):
             last_area, last_index)
 
         captured_stones = self.board[opposing_area][opposing_index]
-        print "%d stones captured!" % captured_stones
+        print("%d stones captured!" % captured_stones)
 
         # Clear the two pits
         self.board[last_area][last_index] = 0
@@ -189,8 +189,6 @@ class Board(object):
         Optionally returns as tuple for assertion testing.
          """
 
-        from .mancala import reverse_index
-
         if orig_area == P1_PITS:
             opposing_area = P2_PITS
         elif orig_area == P2_PITS:
@@ -202,7 +200,7 @@ class Board(object):
         else:
             raise InvalidBoardArea
 
-        opposing_index = reverse_index(index)
+        opposing_index = REVERSE_INDEX-index
 
         return opposing_area, opposing_index
 

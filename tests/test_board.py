@@ -2,8 +2,8 @@
 
 import unittest
 
-from ..mancala.board import Board, InvalidMove
-from ..mancala.constants import P1_PITS, P2_PITS, P1_STORE, P2_STORE
+from mancala.board import Board, InvalidMove
+from mancala.constants import P1_PITS, P2_PITS, P1_STORE, P2_STORE
 
 class TestPlayer1Moves(unittest.TestCase):
     """ Tests for Mancala Board functions. """
@@ -51,7 +51,7 @@ class TestPlayer1Moves(unittest.TestCase):
                             [[5, 5, 4, 4, 0, 5], [1], \
                             [5, 5, 5, 5, 5, 5], [0]]
 
-        print "test_player1__move_stones() tests pass."
+        print("test_player1__move_stones() tests pass.")
 
     def test_free_move_earned(self):
         """ Test that free moves are only earned in one's own store. """
@@ -67,7 +67,7 @@ class TestPlayer1Moves(unittest.TestCase):
                             [[5, 0, 5, 5, 5, 0], [7],
                             [0, 5, 0, 5, 5, 5], [1]])
 
-        print "test_player1_stone_capture() tests pass."
+        print("test_player1_stone_capture() tests pass.")
 
     def test_get_score(self):
         """ Test that Board.get_score works while we have boards ready. """
@@ -75,7 +75,7 @@ class TestPlayer1Moves(unittest.TestCase):
         self.assertEqual(self.board3.get_score(1), 1)
         self.assertEqual(self.board3.get_score(2), 0)
         self.board5.board = self.board5._move_stones(1, 1)[0]
-        print "Board 5: " + str(self.board5.board)
+        print("Board 5: " + str(self.board5.board))
         self.assertEqual(self.board5.get_score(1), 7)
         self.assertEqual(self.board5.get_score(2), 1)
 
@@ -92,7 +92,7 @@ class TestPlayer1Moves(unittest.TestCase):
     def test_reverse_index(self):
         """ Test that _reverse_index works. """
         # Assumes 6 pits.
-        from ..mancala.mancala import reverse_index
+        from mancala.mancala import reverse_index
         self.assertEqual(reverse_index(0), 5)
         self.assertEqual(reverse_index(1), 4)
         self.assertEqual(reverse_index(2), 3)
@@ -134,7 +134,7 @@ class TestPlayer2Moves(unittest.TestCase):
                             [[5, 5, 5, 5, 5, 5], [0], \
                             [5, 5, 1, 6, 6, 5], [1]]
 
-        print "test_player2__move_stones() tests pass."
+        print("test_player2__move_stones() tests pass.")
 
 class TestTextifyBoardFunctions(unittest.TestCase):
     """ Tests for Mancala Board functions. """
@@ -149,4 +149,4 @@ class TestTextifyBoardFunctions(unittest.TestCase):
         Takes a Board instance as input. """
         assert self.board.textify_board() == \
                                     "   4  4  4  4  4  5\n 0                    1\n   4  4  4  0  5  5\n"
-        print "textify_board() tests pass."
+        print("textify_board() tests pass.")

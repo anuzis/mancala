@@ -2,7 +2,7 @@
 
 import unittest
 
-from ..mancala.mancala import Match
+from mancala.mancala import Match
 
 class TestMatchFunctions(unittest.TestCase):
     """ Tests for Match functions. """
